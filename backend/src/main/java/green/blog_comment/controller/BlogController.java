@@ -19,14 +19,14 @@ public class BlogController {
         this.naverApiBlogService = naverApiBlogService;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000") // 특정 Origin만 허용
+    @CrossOrigin(origins = {"http://localhost:3000", "http://54.180.136.224:3000"}) // 특정 Origin만 허용
     @GetMapping("/main")
     public String newChromBlogComment() throws Exception {
         blogCommentService.postComment();
         return "ok";
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://54.180.136.224:3000"})
     @PostMapping("/blog/search")
     public String blogSearch(HttpServletRequest request) {
         String postName = request.getParameter("postName");

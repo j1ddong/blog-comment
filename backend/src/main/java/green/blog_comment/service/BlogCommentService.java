@@ -26,10 +26,13 @@ public class BlogCommentService {
     @Value("${app.naver.login.auth.baseUrl}")
     private String naverApiBaseUrl;
 
+    @Value("${chrome.driver.path}")
+    private String chromeDriverPath;
+
 
     public void postComment() throws Exception {
         // ChromeDriver 경로 설정 (환경에 맞게 수정)
-        System.setProperty("webdriver.chrome.driver", "/opt/homebrew/bin/chromedriver");
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
         // ChromeOptions 설정 (헤드리스 모드 사용 가능)
         ChromeOptions options = new ChromeOptions();
