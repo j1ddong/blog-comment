@@ -11,6 +11,7 @@
   "dependencies": {
     "chromedriver": "^133.0.2",
     "next": "15.1.7",
+    "puppeteer": "^24.4.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "selenium-webdriver": "^4.29.0"

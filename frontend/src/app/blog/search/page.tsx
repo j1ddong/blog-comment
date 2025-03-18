@@ -25,14 +25,13 @@ export default function BlogSearch() {
 
   const searchBlogPost = async(retryCount = 0) => {
     const MAX_RETRIES = 500; 
-    const blogInputMap = new FormData();
-    blogInputMap.append("postName", postName.trim());
 
     const url = API_ENDPOINTS.BLOGSEARCH;
     try {
       const response = await fetch(url, {
         method: "POST",
-        body: blogInputMap,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postName: postName.trim()}),
       });
 
       const htmlBlogSearchResponse = await response.text();
