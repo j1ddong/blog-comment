@@ -6,10 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "export": "next export",
     "lint": "next lint"
+  },
+  "pkg": {
+    "assets": [
+      ".next/**/*",
+      "public/**/*",
+      "node_modules/sharp/vendor/**/*"
+    ]
   },
   "dependencies": {
     "chromedriver": "^133.0.2",
+    "express": "^4.21.2",
     "next": "15.1.7",
     "puppeteer": "^24.4.0",
     "react": "^19.0.0",

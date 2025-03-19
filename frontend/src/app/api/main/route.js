@@ -55,9 +55,8 @@ export async function GET() {
     await page.type(commentInputSelector, '안녕하세요!');
 
     // 댓글 작성 버튼 클릭 (주석 처리된 부분)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const submitButtonSelector = '[data-uiselector="writeButton"]';
-    //await page.click(submitButtonSelector);
+    await page.click(submitButtonSelector);
 
     return NextResponse.json({message: '댓글 작성 완료'}, {status: 200});
     

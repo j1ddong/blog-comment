@@ -1,10 +1,14 @@
 "use client";
 
 import styles from "@/app/styles/search.module.css";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useRef, useState } from "react";
 import { API_ENDPOINTS } from "@/config/apiConfig";
+import Loading from "@/app/components/Loading";
 
 export default function BlogSearch() {
+  const loadingRef = useRef(false);
+  const [loading, setLoading] = useState(false);
+
   const now = new Date();
 
   const year = now.getFullYear().toString();
@@ -47,14 +51,18 @@ export default function BlogSearch() {
       );
 
       if (!blogSearchResult) {
+        if(!loadingRef.current) return;
+
         if (retryCount < MAX_RETRIES) {
           await delay(1000);
           await searchBlogPost(retryCount + 1);
         } else {
+          setLoading(false);
           alert("블로그가 검색되지 않았습니다. 다시 확인해주세요.");
         }
         return;
       }
+      setLoading(false);
 
       const parts = blogSearchResult.link.split("/");
       const blogId = parts[parts.length - 2];
@@ -75,14 +83,24 @@ export default function BlogSearch() {
       alert("블로그 이름과 게시글 이름을 작성해주세요.");
       return;
     } 
+    setLoading(true);
+    loadingRef.current = true;
     searchBlogPost();
+  };
 
-   
+  const stopBtnHandler = () => {
+    const confirmAction = confirm('정말 중지하시겠습니까?');
+
+    if (confirmAction) {
+      setLoading(false);
+      loadingRef.current = false;
+    }
   };
 
   return (
     <div>
       <main>
+        {loading && <Loading stopBtnHandler={stopBtnHandler}/>}
         <form onSubmit={blogSearchBtnOnClick} className={styles.container}>
           <h1 className={styles.title}>블로그 찾기</h1>
           <label htmlFor="blogName" className={styles.label}>
