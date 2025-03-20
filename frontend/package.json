@@ -6,15 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "export": "next export",
     "lint": "next lint"
-  },
-  "pkg": {
-    "assets": [
-      ".next/**/*",
-      "public/**/*",
-      "node_modules/sharp/vendor/**/*"
-    ]
   },
   "dependencies": {
     "chromedriver": "^133.0.2",

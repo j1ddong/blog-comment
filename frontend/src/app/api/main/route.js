@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
-import { getBlogUrl } from '@/app/api/blog/search/route';
+import { getBlogUrl } from '@/app/api/blog/search/api';
 
 export async function POST(req) {
 
