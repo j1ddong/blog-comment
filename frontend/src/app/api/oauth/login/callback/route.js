@@ -11,7 +11,6 @@ export async function GET(req) {
     }
 
     const { NAVER_AUTH_CLIENT_ID, NAVER_API_AUTH_BASE_URL, NAVER_AUTH_CLIENT_SECRET, BASE_URL } = process.env;
-
   
     try {
       // 액세스 토큰 요청을 위한 URL 생성
@@ -28,10 +27,9 @@ export async function GET(req) {
       if (!response.ok) {
         throw new Error('Failed to fetch access token');
       }
-  
       await response.json();
 
-      return NextResponse.redirect(`${BASE_URL}blog/search`);
+      return NextResponse.json({status: 200});
     } catch (error) {
       console.error('Error fetching access token:', error);
       return NextResponse.json({error: error.message}, {status: 500});

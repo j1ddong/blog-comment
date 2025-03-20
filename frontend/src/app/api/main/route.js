@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
+import { getBlogUrl } from '@/app/api/blog/search/route';
 
-export async function GET() {
+export async function POST(req) {
+
+  const body = await req.json();
+  const { loginId, loginPswd, blogName, postName, postDate } = body;
 
   const { NAVER_AUTH_CLIENT_ID, NAVER_API_AUTH_BASE_URL, BASE_URL } = process.env;
 
-  const CALLBACK_URL = `${BASE_URL}api/oauth/login/callback`;
+  const CALLBACK_URL = `${BASE_URL}api/oauth/login/callback?blogName=${blogName}postName=${postName}postDate=${postDate}`;
 
   const url = `${NAVER_API_AUTH_BASE_URL}authorize?response_type=code&client_id=${NAVER_AUTH_CLIENT_ID}&redirect_uri=${CALLBACK_URL}&state=blog-comment`;
 
@@ -23,17 +27,28 @@ export async function GET() {
     // 로그인 페이지로 이동
     await page.goto(url);
 
+    const idInputSelector = `#id`;
+    await page.type(idInputSelector, loginId, { delay: 100 });
+
+    const pswdInputSeleotr = `#pw`;
+    await page.type(pswdInputSeleotr, loginPswd, { delay: 100 });
+
+    const loginBtnSelector = `#log\\.login`;
+    const loginBtnElement = await page.$(loginBtnSelector);
+    await loginBtnElement.click();
+
+    const dontsaveSelector = '#new\\.dontsave';
+    await page.waitForSelector(dontsaveSelector); 
+    const dontsaveElement = await page.$(dontsaveSelector);
+    await dontsaveElement.click();
+
     // blogId가 포함된 URL을 기다림
-    const isBlogFound = await waitForBlogId(page, 1200, 1000);
-    if (!isBlogFound) {
+    const blogUrl = await waitForBlogUrl(blogName, postName, postDate);
+    if (!blogUrl) {
       return NextResponse.json({message: 'Blog ID not found in URL'}, {status: 404});
     }
-
-    const currentUrl = page.url();
-    const queryParams = new URLSearchParams(currentUrl.split('?')[1]);
+    const queryParams = new URLSearchParams(blogUrl.split('?')[1]);
     const logNo = queryParams.get('logNo');
-
-    const blogUrl = `https://blog.naver.com/PostView.naver?${queryParams.toString()}`;
 
     // 블로그 게시글로 이동
     await page.goto(blogUrl);
@@ -61,23 +76,16 @@ export async function GET() {
     return NextResponse.json({message: '댓글 작성 완료'}, {status: 200});
     
   } catch (error) {
-    console.error('댓글 작성 중 오류 발생:', error);
     return NextResponse.json({message: `댓글 작성 중 오류 발생: ${error.message}`}, {status: 500});
   } finally {
     if (browser) {
-      //await browser.close(); // 브라우저 종료
+      await browser.close(); // 브라우저 종료
     }
   }
 }
 
 // blogId가 포함된 URL을 기다리는 함수
-async function waitForBlogId(page, maxRetries, intervalMs) {
-  for (let i = 0; i < maxRetries; i++) {
-    const currentUrl = page.url();
-    if (currentUrl.includes('blogId=')) {
-      return true;
-    }
-    await new Promise((resolve) => setTimeout(resolve, intervalMs));
-  }
-  return false;
+async function waitForBlogUrl(blogName, postName, postDate) {
+  const blogUrl = await getBlogUrl(blogName, postName, postDate);
+  return blogUrl;
 }
