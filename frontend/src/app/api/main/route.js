@@ -17,7 +17,7 @@ export async function POST(req) {
   try {
     // Puppeteer 브라우저 시작
     browser = await puppeteer.launch({
-      headless: false, // 브라우저 창 없이 실행 (헤드리스 모드)
+      headless: true, // 브라우저 창 없이 실행 (헤드리스 모드)
       args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
     });
 
