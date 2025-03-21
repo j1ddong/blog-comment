@@ -9,7 +9,7 @@ export async function POST(req) {
 
   const { NAVER_AUTH_CLIENT_ID, NAVER_API_AUTH_BASE_URL, BASE_URL } = process.env;
 
-  const CALLBACK_URL = `${BASE_URL}api/oauth/login/callback?blogName=${blogName}postName=${postName}postDate=${postDate}`;
+  const CALLBACK_URL = `${BASE_URL}api/oauth/login/callback`;
 
   const url = `${NAVER_API_AUTH_BASE_URL}authorize?response_type=code&client_id=${NAVER_AUTH_CLIENT_ID}&redirect_uri=${CALLBACK_URL}&state=blog-comment`;
 

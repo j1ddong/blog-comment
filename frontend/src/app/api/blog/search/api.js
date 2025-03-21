@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 
 export async function getBlogUrl(blogName, postName, postDate, retryCount = 0) {
   const MAX_RETRIES = 500; 
-
   try {
     const blogSearchResponse = await searchBlog(postName)
 

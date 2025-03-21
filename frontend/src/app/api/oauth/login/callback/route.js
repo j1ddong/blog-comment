@@ -7,7 +7,7 @@ export async function GET(req) {
     const state = searchParams.get('state');
   
     if (!code || !state) {
-      return res.status(400).json({ message: 'Missing required parameters: code or state' });
+      return NextResponse.json({ message: 'Missing required parameters: code or state' }, {status: 400});
     }
 
     const { NAVER_AUTH_CLIENT_ID, NAVER_API_AUTH_BASE_URL, NAVER_AUTH_CLIENT_SECRET, BASE_URL } = process.env;
